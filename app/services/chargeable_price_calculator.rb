@@ -22,7 +22,7 @@ class ChargeablePriceCalculator
 
       missing_codes << code and next if product.blank?
 
-      total_price += product.price * quantity
+      total_price += product.discounted_price(quantity)
     end
 
     [missing_codes, total_price]

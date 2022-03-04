@@ -17,8 +17,8 @@ class Api::V1::ProductsController < Api::V1::BaseController
     end
   end
 
-  # GET /products/check_price
-  # GET /products/check_price.json
+  # GET /products/chargeable_price
+  # GET /products/chargeable_price.json
   def chargeable_price
     missing_codes, price = ChargeablePriceCalculator.run(chargeable_price_params[:codes])
 

@@ -1,7 +1,7 @@
 require 'rails_helper'
 
 RSpec.describe Product, type: :request do
-  fixtures :products
+  fixtures :products, :discounts
 
   describe 'GET /index' do
     before do
@@ -70,6 +70,42 @@ RSpec.describe Product, type: :request do
 
         error = JSON.parse(response.body)['errors'].first
         expect(error).to eql('Could not find products for xyz')
+      end
+    end
+  end
+
+  describe 'GET /check_price' do
+    context 'with valid product_list' do
+      let(:product_code1) { Product.first.code }
+      let(:product_code2) { Product.last.code }
+
+      context 'for singular discount type' do
+        it 'returns total value with discounted price of the products' do
+          get '/api/v1/products/discounted_price',
+              params: { products: { product_list: [product_code1, product_code1, product_code2] } }
+
+          expect(response).to have_http_status(:success)
+          expect(JSON.parse(response.body)['total']).to eql('19.0')
+        end
+      end
+
+      context 'for multiple discount type' do
+        it 'returns total value with discounted price of the products' do
+          get '/api/v1/products/discounted_price',
+              params: { products: { product_list: [product_code1, product_code2, product_code2, product_code2] } }
+
+          expect(response).to have_http_status(:success)
+          expect(JSON.parse(response.body)['total']).to eql('30.0')
+        end
+      end
+    end
+
+    context 'with empty product_list' do
+      it 'returns record being empty message' do
+        get '/api/v1/products/check_price', params: { products: { product_list: [] } }
+
+        expect(response).to have_http_status(404)
+        expect(response.body).to eql('No records found!')
       end
     end
   end

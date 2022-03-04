@@ -3,15 +3,26 @@
 require "rails_helper"
 
 RSpec.describe ChargeablePriceCalculator do
-  fixtures :products
+  fixtures :products, :discounts
 
-  let(:product_code1) { Product.first.code }
-  let(:product_code2) { Product.last.code }
+  let(:product_code1) { products(:one).code }
+  let(:product_code2) { products(:two).code }
 
   describe "run" do
-    context 'with valid product_list' do
+    context 'with valid codes' do
       it 'returns total price of the products' do
         codes = [product_code1, product_code2]
+
+        missing_codes, total_price = described_class.run(codes)
+
+        expect(missing_codes).to eql([])
+        expect(total_price).to eql(19.0)
+      end
+    end
+
+    context 'with valid codes and discounts applicable' do
+      it 'returns total discounted price of the products' do
+        codes = [product_code1, product_code1, product_code2]
 
         missing_codes, total_price = described_class.run(codes)
 
@@ -27,7 +38,7 @@ RSpec.describe ChargeablePriceCalculator do
         missing_codes, total_price = described_class.run(codes)
 
         expect(missing_codes).to eql(["xyz"])
-        expect(total_price).to eql(10.0)
+        expect(total_price).to eql(9.0)
       end
     end
   end

@@ -1,9 +1,11 @@
 one:
-  code: TSHIRT
-  name: MyString T-shirt
+  id: 1
+  code: MUG
+  name: Reedsy Mug
   price: 9.00
 
 two:
-  code: HUB
-  name: MyString Hub
+  id: 2
+  code: TSHIRT
+  name: Reedsy TSHIRT
   price: 10.00

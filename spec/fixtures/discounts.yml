@@ -1,0 +1,12 @@
+discount_one:
+  unit: free_item
+  value: 1
+  min_quantity: 2
+  product_id: 1
+
+discount_two:
+  unit: percentage
+  value: 30
+  min_quantity: 3
+  product_id: 2
+
