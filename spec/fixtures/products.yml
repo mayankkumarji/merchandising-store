@@ -1,0 +1,9 @@
+one:
+  code: TSHIRT
+  name: MyString T-shirt
+  price: 9.00
+
+two:
+  code: HUB
+  name: MyString Hub
+  price: 10.00
