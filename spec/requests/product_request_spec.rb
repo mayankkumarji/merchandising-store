@@ -46,4 +46,31 @@ RSpec.describe Product, type: :request do
       end
     end
   end
+
+  describe 'GET /chargeable_price' do
+    context 'with valid codes' do
+      let(:product_code1) { Product.first.code }
+      let(:product_code2) { Product.last.code }
+
+      it 'returns total price of the products' do
+        params = { products: { codes: [product_code1, product_code2] } }
+
+        get '/api/v1/products/chargeable_price', params: params
+
+        expect(response).to have_http_status(200)
+        expect(JSON.parse(response.body)['total']).to eql('19.0')
+      end
+    end
+
+    context 'with missing codes' do
+      it 'returns 404 http status' do
+        get '/api/v1/products/chargeable_price', params: { products: { codes: ["xyz"] } }
+
+        expect(response).to have_http_status(404)
+
+        error = JSON.parse(response.body)['errors'].first
+        expect(error).to eql('Could not find products for xyz')
+      end
+    end
+  end
 end
